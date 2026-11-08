@@ -63,7 +63,7 @@ header.top{position:sticky;top:0;z-index:20;background:rgba(10,16,30,.92);backdr
 .pt-chip{display:flex;gap:6px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-family:var(--mono);font-size:13px}
 .pt-chip b{color:var(--gold2)}
 main{max-width:760px;margin:0 auto;padding:14px 14px calc(96px + var(--safe-b))}
-nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:30;background:rgba(12,19,36,.97);border-top:1px solid var(--line);
+nav.tabs{position:fixed;bottom:0;left:0;right:0;padding-left:max(4px,calc((100vw - 760px)/2))!important;padding-right:max(4px,calc((100vw - 760px)/2))!important;z-index:30;background:rgba(12,19,36,.97);border-top:1px solid var(--line);
   display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(6px + var(--safe-b))}
 nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:10.5px;color:var(--tx3);font-weight:600;letter-spacing:.02em;border-radius:10px}
 nav.tabs button svg{width:22px;height:22px}
@@ -179,6 +179,18 @@ footer.sig b{color:var(--tx2)}
 .sheet .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .sheet .field{margin-top:10px}
 .sheet .field input,.sheet .field select{font-size:16px;padding:11px 10px}
+.codebar{display:flex;align-items:center;gap:12px;max-width:760px;width:100%;margin:8px auto 0;background:var(--card);border:1px solid rgba(233,180,76,.45);border-radius:12px;padding:6px 12px;text-align:left}
+.codebar .cb-t{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--gold2);letter-spacing:-.01em;line-height:1}
+.codebar .cb-m{display:flex;flex-direction:column;line-height:1.15}
+.codebar .cb-m small{font-size:9.5px;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.codebar .cb-m b{font-family:var(--mono);color:var(--green);font-size:14px}
+.codebar .cb-b{margin-left:auto;font-family:var(--mono);font-size:13px;font-weight:700;min-width:70px;text-align:center;padding:6px 4px;border-radius:8px;color:var(--tx2);background:var(--bg2)}
+.codebar .cb-b:empty{display:none}
+.codebar .cb-b.flash{background:rgba(233,180,76,.45);color:#fff} .codebar .cb-b.flashv{background:rgba(92,200,255,.45);color:#fff}
+.codebar .cb-e{white-space:pre-line;font-family:var(--mono);font-size:11px;color:var(--amber);text-align:right;line-height:1.25}
+.codebar .cb-e:empty{display:none}
+.codebar .cb-e.red{color:var(--red)}
+@media (max-width:380px){ .codebar .cb-t{font-size:24px} .codebar{gap:8px} }
 .toast{position:fixed;left:50%;bottom:calc(84px + var(--safe-b));transform:translateX(-50%);background:var(--gold);color:#1d1404;font-weight:700;padding:9px 16px;border-radius:99px;font-size:13px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 @media (min-width:640px){ .ev-grid{grid-template-columns:repeat(4,1fr)} }
@@ -213,7 +225,7 @@ footer.sig b{color:var(--tx2)}
   </div>
   <div class="cv-bottom">
     <button class="btn-gold" id="btnStart">Entrar</button>
-    <div class="cv-credit">Concepto original: <b>Dr. Kenneth Williams</b><br>Revisión y actualización 2026: <b>Dr. Jano Jaramillo</b> — Médico Pediatra y Neonatólogo · Posgrado en Trastornos del Aprendizaje<br>v2.1 · 7 nov 2026</div>
+    <div class="cv-credit">Concepto original: <b>Dr. Kenneth Williams</b><br>Revisión y actualización 2026: <b>Dr. Jano Jaramillo</b> — Médico Pediatra y Neonatólogo · Posgrado en Trastornos del Aprendizaje<br>v2.1.1 · 7 nov 2026</div>
   </div>
 </div>
 
@@ -223,6 +235,12 @@ footer.sig b{color:var(--tx2)}
     <div class="brand">Minuto de <em>Oro</em></div>
     <button class="pt-chip" id="ptChip" aria-label="Editar paciente"><span id="chipTxt">— kg · — sem</span></button>
   </div>
+  <button class="codebar hide" id="codebar" aria-label="Ir al código">
+    <span class="cb-t" id="cbT">00:00</span>
+    <span class="cb-m"><small>SpO₂ meta</small><b id="cbS">—</b></span>
+    <span class="cb-b" id="cbB"></span>
+    <span class="cb-e" id="cbE"></span>
+  </button>
 </header>
 
 <main>
@@ -264,7 +282,7 @@ footer.sig b{color:var(--tx2)}
 <!-- ============ TAB 2: CÓDIGO EN VIVO ============ -->
 <section class="tab" id="t-code">
   <h2 class="sec">Código <small>cronómetro desde el nacimiento</small></h2>
-  <div class="card">
+  <div class="card" id="clockCard">
     <div class="clock">
       <div class="t mono" id="clk">00:00</div>
       <div class="clock-meta">
@@ -421,7 +439,7 @@ footer.sig b{color:var(--tx2)}
   </ol>
 
   <footer class="sig">
-    <b>Minuto de Oro</b> · CDSS de Reanimación Neonatal · v2.1 (7 nov 2026)<br>
+    <b>Minuto de Oro</b> · CDSS de Reanimación Neonatal · v2.1.1 (7 nov 2026)<br>
     Concepto original: Dr. Kenneth Williams<br>
     Revisión y actualización: Dr. Jano Jaramillo — Médico Pediatra y Neonatólogo · Posgrado en Trastornos del Aprendizaje<br>
     Herramienta de apoyo. No sustituye la certificación NRP vigente, el juicio clínico ni los protocolos institucionales. Verifique cada dosis antes de administrarla.
@@ -857,13 +875,25 @@ function tick(){
   $('btnCierre').classList.toggle('hide',!code.end);
   $('clkState').textContent=!code.start?'Detenido':code.end?'Finalizado':'En curso';
   const m=Math.floor(s/60);
-  $('clkHint').textContent=!code.start?'Pulse «Nacimiento» al salir el bebé.':code.end?'Código cerrado. Copie la bitácora.':(s<60?'Minuto de oro: ventilar si apnea o FC <100.':'Minuto '+(m+1)+' de vida');
+  $('clkHint').textContent=!code.start?'Pulse «Nacimiento» al salir el bebé.':code.end?'Código cerrado. Copie la bitácora.':(s<60?'Minuto de oro: ventilar si apnea o FC <100.':'Reevalúe FC, tórax y SpO₂ cada 30 s.');
   const sp=code.start?NRP.spo2At(s):null; $('spo2val').textContent=sp||'—';
-  $('spo2min').textContent=code.start?(sp?'minuto '+Math.floor(s/60)+' de vida':'antes del min 2: titular sin meta tabulada'):'desde el minuto 2';
+  $('spo2min').textContent=code.start?(sp?'meta del minuto '+(m>=10?'10 en adelante':m):'antes del min 2: titular sin meta tabulada'):'desde el minuto 2';
   $('alert20').style.display=(code.start&&s>=1200&&!code.end)?'block':'none';
   renderEpi();
+  const showBar=!!run && !(clockSeen && $('t-code').classList.contains('on'));
+  $('codebar').classList.toggle('hide',!showBar);
+  if(showBar){ $('cbT').textContent=mmss(s); $('cbS').textContent=sp||'transición';
+    const n=code.epi.length, E=$('cbE'); E.classList.remove('red');
+    if(!n) E.textContent='';
+    else { const last=code.epi[n-1], es=(now()-last.at)/1000;
+      if(last.route==='EPI_ET'){ E.textContent='Adren. ET · IV pend.'; }
+      else if(es<180){ E.textContent='Adren. #'+(n+1)+'\nen '+mmss(180-es); }
+      else { E.textContent='Adren. #'+(n+1)+'\nYA ('+mmss(es)+')'; E.classList.add('red'); } } }
   if($('t-algo').classList.contains('on')) renderSpo2Table();
 }
+let clockSeen=true;
+try{ new IntersectionObserver(es=>{ clockSeen=es[0].isIntersecting; tick(); },{rootMargin:'-110px 0px 0px 0px',threshold:0.6}).observe($('clockCard')); }catch(e){ clockSeen=false; }
+$('codebar').addEventListener('click',()=>{ go('t-code'); });
 setInterval(tick,500);
 
 /* =====================================================
@@ -872,8 +902,8 @@ setInterval(tick,500);
 let ac=null, mTimer=null, mMode=null, mStep=0;
 function beep(f,dur,vol){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); if(ac.state==='suspended') ac.resume();
   const o=ac.createOscillator(),g=ac.createGain(); o.frequency.value=f; o.type='sine'; g.gain.setValueAtTime(vol,ac.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+dur); o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+dur);}catch(e){} }
-function flash(cls,txt){ const b=$('beat'); b.textContent=txt; if(!cls) return; b.classList.add(cls); setTimeout(()=>b.classList.remove(cls),120); }
-function stopMetro(){ clearInterval(mTimer); mTimer=null; mMode=null; $('mVent').classList.remove('on'); $('mComp').classList.remove('on'); $('beat').textContent='—'; }
+function flash(cls,txt){ [$('beat'),$('cbB')].forEach(b=>{ b.textContent=txt; if(!cls) return; b.classList.add(cls); setTimeout(()=>b.classList.remove(cls),120); }); }
+function stopMetro(){ clearInterval(mTimer); mTimer=null; mMode=null; $('mVent').classList.remove('on'); $('mComp').classList.remove('on'); $('beat').textContent='—'; $('cbB').textContent=''; }
 function startMetro(mode){
   stopMetro(); mMode=mode; mStep=0; $(mode==='v'?'mVent':'mComp').classList.add('on');
   if(mode==='v'){ // 40/min: ventila (1) - dos - tres => 1.5 s ciclo, 3 tiempos de 0.5 s
