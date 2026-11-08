@@ -163,6 +163,22 @@ details .in ul{padding-left:18px} details .in li{margin:4px 0} details .in b{col
 .refs{font-size:12px;color:var(--tx3)} .refs li{margin:5px 0}
 footer.sig{margin-top:24px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--tx3);text-align:center;line-height:1.6}
 footer.sig b{color:var(--tx2)}
+.qlab{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);font-weight:700;margin:2px 0 6px}
+.qrow{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px}
+.qrow.two{grid-template-columns:1fr 1fr}
+.q{padding:12px 0;border-radius:10px;background:var(--bg2);border:1px solid var(--line);font-family:var(--mono);font-weight:700;font-size:14px}
+.q:active{transform:scale(.96)}
+.q.on{border-color:var(--gold);background:rgba(233,180,76,.16);color:var(--gold2)}
+.q.g{color:#bff3dc;border-color:rgba(61,220,151,.4);font-family:var(--sans)}
+.q.r{color:#ffc2c4;border-color:rgba(255,90,95,.45);font-family:var(--sans)}
+.evalnow{font-size:12.5px;color:var(--tx2);margin:-4px 0 10px;min-height:18px}
+.evalnow b.low{color:var(--red)} .evalnow b.ok{color:var(--green)} .evalnow b.high{color:var(--amber)}
+.modal{position:fixed;inset:0;z-index:70;background:rgba(4,7,14,.74);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--card);border:1px solid var(--line);border-radius:18px 18px 0 0;width:100%;max-width:560px;max-height:90vh;overflow:auto;padding:18px 16px calc(18px + var(--safe-b))}
+.sheet h3{font-family:var(--serif);font-weight:400;font-size:21px;margin-bottom:4px}
+.sheet .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sheet .field{margin-top:10px}
+.sheet .field input,.sheet .field select{font-size:16px;padding:11px 10px}
 .toast{position:fixed;left:50%;bottom:calc(84px + var(--safe-b));transform:translateX(-50%);background:var(--gold);color:#1d1404;font-weight:700;padding:9px 16px;border-radius:99px;font-size:13px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 @media (min-width:640px){ .ev-grid{grid-template-columns:repeat(4,1fr)} }
@@ -197,7 +213,7 @@ footer.sig b{color:var(--tx2)}
   </div>
   <div class="cv-bottom">
     <button class="btn-gold" id="btnStart">Entrar</button>
-    <div class="cv-credit">Concepto original: <b>Dr. Kenneth Williams</b><br>Revisión y actualización 2026: <b>Dr. Jano Jaramillo</b> — Médico Pediatra y Neonatólogo · Posgrado en Trastornos del Aprendizaje<br>v2.0 · 31 oct 2026</div>
+    <div class="cv-credit">Concepto original: <b>Dr. Kenneth Williams</b><br>Revisión y actualización 2026: <b>Dr. Jano Jaramillo</b> — Médico Pediatra y Neonatólogo · Posgrado en Trastornos del Aprendizaje<br>v2.1 · 7 nov 2026</div>
   </div>
 </div>
 
@@ -267,6 +283,17 @@ footer.sig b{color:var(--tx2)}
     <div class="note red alert20" id="alert20"><b>≈20 min sin frecuencia cardíaca detectable</b> pese a todos los pasos: es razonable discutir con el equipo y la familia la redirección del cuidado (AHA/AAP 2025). Decisión individualizada.</div>
   </div>
 
+  <div class="card" id="evalCard">
+    <h3>Evaluación rápida</h3>
+    <div class="evalnow" id="evalNow">Un toque registra el valor con su minuto de vida.</div>
+    <div class="qlab">SpO₂ preductal (%)</div>
+    <div class="qrow" id="qSpo2"></div>
+    <div class="qlab">FiO₂ (%)</div>
+    <div class="qrow" id="qFio2"></div>
+    <div class="qlab">¿Se mueve el tórax con la ventilación?</div>
+    <div class="qrow two" id="qTorax"><button class="q g" data-v="1">Sí</button><button class="q r" data-v="0">No → MR. SOPA</button></div>
+  </div>
+
   <div class="card">
     <h3>Registrar evento</h3>
     <div class="ev-grid" id="evGrid"></div>
@@ -284,7 +311,7 @@ footer.sig b{color:var(--tx2)}
   </div>
 
   <div class="card">
-    <h3 style="display:flex;justify-content:space-between;align-items:center">Bitácora <span><button class="pill p-gold" id="btnCopy">Copiar</button> <button class="pill p-gray" id="btnClear">Borrar</button></span></h3>
+    <h3 style="display:flex;justify-content:space-between;align-items:center">Bitácora <span><button class="pill p-blue hide" id="btnCierre">Cierre</button> <button class="pill p-gold" id="btnCopy">Copiar</button> <button class="pill p-gray" id="btnClear">Borrar</button></span></h3>
     <div class="log" id="log"><p class="tiny">Sin eventos.</p></div>
   </div>
 </section>
@@ -394,7 +421,7 @@ footer.sig b{color:var(--tx2)}
   </ol>
 
   <footer class="sig">
-    <b>Minuto de Oro</b> · CDSS de Reanimación Neonatal · v2.0 (31 oct 2026)<br>
+    <b>Minuto de Oro</b> · CDSS de Reanimación Neonatal · v2.1 (7 nov 2026)<br>
     Concepto original: Dr. Kenneth Williams<br>
     Revisión y actualización: Dr. Jano Jaramillo — Médico Pediatra y Neonatólogo · Posgrado en Trastornos del Aprendizaje<br>
     Herramienta de apoyo. No sustituye la certificación NRP vigente, el juicio clínico ni los protocolos institucionales. Verifique cada dosis antes de administrarla.
@@ -412,6 +439,7 @@ footer.sig b{color:var(--tx2)}
   <button data-t="t-air"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v8M8 11c-3 0-5 3-5 7 0 2 1 3 3 3 3 0 4-3 4-6v-4M16 11c3 0 5 3 5 7 0 2-1 3-3 3-3 0-4-3-4-6v-4"/></svg>Vía aérea</button>
 </nav>
 <div class="toast" id="toast"></div>
+<div class="modal hide" id="modal"><div class="sheet" id="sheet"></div></div>
 
 <script>
 (function(){
@@ -666,7 +694,6 @@ const EVENTS=[
   ['CPAP','PEEP 5','b','CPAP iniciado'],
   ['TET','colocado','b','Intubación endotraqueal'],
   ['Máscara laríngea','colocada','b','Máscara laríngea colocada'],
-  ['FiO₂ 100 %','','b','FiO₂ aumentada a 100 %'],
   ['Compresiones','inicio','r','Inicio de compresiones 3:1'],
   ['CVU / IO','acceso','r','Acceso vascular (CVU/IO)'],
   ['Adrenalina','IV/IO','r','EPI_IV'],
@@ -684,6 +711,11 @@ $('evGrid').innerHTML=EVENTS.map((e,i)=>`<button class="ev ${e[2]}" data-i="${i}
 $('evGrid').addEventListener('click',ev=>{
   const b=ev.target.closest('.ev'); if(!b) return; const e=EVENTS[+b.dataset.i];
   if(!code.start){ startCode(); }
+  const needsKg=(e[3]==='EPI_IV'||e[3]==='EPI_ET'||e[3]==='Expansor de volumen');
+  if(needsKg&&!pt.kg){ askWeight(()=>doEvent(e)); return; }
+  doEvent(e);
+});
+function doEvent(e){
   if(e[3]==='EPI_IV'||e[3]==='EPI_ET'){
     const kg=pt.kg, d=kg?NRP.doses(kg):null;
     let txt=e[3]==='EPI_IV'?'Adrenalina IV/IO':'Adrenalina ET';
@@ -693,7 +725,108 @@ $('evGrid').addEventListener('click',ev=>{
   if(e[3]==='NOTE'){ const n=prompt('Nota para la bitácora:'); if(n) addLog(n.slice(0,140)); return; }
   if(e[3]==='Expansor de volumen'&&pt.kg){ addLog('Expansor de volumen '+fmt(NRP.doses(pt.kg).vol.ml,1)+' mL'); return; }
   addLog(e[3]);
+}
+
+/* ---------- Evaluación rápida (v2.1) ---------- */
+const SPO2_Q=[60,65,70,75,80,85,90,95,100,'Otro'], FIO2_Q=[21,30,40,60,100];
+$('qSpo2').innerHTML=SPO2_Q.map(v=>`<button class="q" data-v="${v}">${v}</button>`).join('');
+$('qFio2').innerHTML=FIO2_Q.map(v=>`<button class="q" data-v="${v}">${v}</button>`).join('');
+function spo2Status(v,sec){
+  const r=NRP.spo2At(sec); if(!r) return {r:null,cls:'',txt:'sin meta (antes del min 2)'};
+  const [lo,hi]=r.match(/\d+/g).map(Number);
+  if(v<lo) return {r,cls:'low',txt:'BAJA'}; if(v>hi) return {r,cls:'high',txt:'ALTA'}; return {r,cls:'ok',txt:'en meta'};
+}
+function renderEvalNow(){
+  const f=code.fio2, l=code.lastSpo2;
+  document.querySelectorAll('#qFio2 .q').forEach(b=>b.classList.toggle('on',+b.dataset.v===f));
+  if(!f&&!l){ $('evalNow').textContent='Un toque registra el valor con su minuto de vida.'; return; }
+  let h=f?'FiO₂ actual <b class="mono">'+f+' %</b>':'FiO₂ sin registrar';
+  if(l){ h+=' · última SpO₂ <b class="mono '+l.cls+'">'+l.v+' %</b> '+(l.r?'('+l.txt+', meta '+l.r+')':'('+l.txt+')');
+    if(l.cls==='low') h+=' → <b class="low">verifique ventilación y suba FiO₂</b>';
+    if(l.cls==='high'&&f&&f>21) h+=' → <b class="high">baje FiO₂</b>'; }
+  $('evalNow').innerHTML=h;
+}
+function logSpo2(v){
+  if(!code.start) startCode();
+  const st=spo2Status(v,elapsed());
+  code.lastSpo2={v,cls:st.cls,txt:st.txt,r:st.r};
+  addLog(`SpO₂ ${v} %`+(code.fio2?` con FiO₂ ${code.fio2} %`:'')+(st.r?` · meta ${st.r} → ${st.txt}`:` · ${st.txt}`));
+  renderEvalNow();
+}
+$('qSpo2').addEventListener('click',e=>{
+  const b=e.target.closest('.q'); if(!b) return;
+  if(b.dataset.v==='Otro'){ askNumber('SpO₂ preductal','%',30,100,v=>logSpo2(v)); return; }
+  logSpo2(+b.dataset.v);
 });
+$('qFio2').addEventListener('click',e=>{
+  const b=e.target.closest('.q'); if(!b) return; if(!code.start) startCode();
+  const v=+b.dataset.v; if(code.fio2===v) return;
+  code.fio2=v; addLog('FiO₂ '+v+' %'+(v===100?' (compresiones / bradicardia grave)':'')); renderEvalNow();
+});
+$('qTorax').addEventListener('click',e=>{
+  const b=e.target.closest('.q'); if(!b) return; if(!code.start) startCode();
+  addLog(b.dataset.v==='1'?'Tórax se mueve con la ventilación':'Tórax NO se mueve → MR. SOPA');
+});
+
+/* ---------- Hojas modales ---------- */
+function openSheet(html){ $('sheet').innerHTML=html; $('modal').classList.remove('hide'); }
+function closeSheet(){ $('modal').classList.add('hide'); $('sheet').innerHTML=''; }
+$('modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeSheet(); });
+function askWeight(cb){
+  openSheet(`<h3>Peso para la dosis</h3><p class="muted">Sin peso la bitácora no puede registrar los mL. Use el estimado si no hay real.</p>
+    <div class="field"><label>Peso (kg)</label><input id="mKg" type="number" inputmode="decimal" step="0.01" min="0.3" max="6" placeholder="3.2"></div>
+    <div class="chips" id="mKgQ">${[0.8,1.2,1.8,2.5,3.0,3.5,4.0].map(w=>`<button data-w="${w}">${fmt(w,1)} kg</button>`).join('')}</div>
+    <div class="row-btns"><button class="bigbtn" id="mSkip">Registrar sin peso</button><button class="bigbtn go" id="mOk">Usar peso</button></div>`);
+  $('mKgQ').addEventListener('click',e=>{const b=e.target.closest('button'); if(b) $('mKg').value=b.dataset.w;});
+  $('mOk').addEventListener('click',()=>{ const kg=parseFloat(String($('mKg').value).replace(',','.')); if(!(kg>=0.3&&kg<=6)) return toast('Peso entre 0,3 y 6 kg');
+    $('peso').value=kg; update(); closeSheet(); addLog('Peso registrado: '+fmt(kg,2)+' kg'); cb(); });
+  $('mSkip').addEventListener('click',()=>{ closeSheet(); cb(); });
+  setTimeout(()=>{const el=$('mKg'); if(el) el.focus();},50);
+}
+function askNumber(title,unit,min,max,cb){
+  openSheet(`<h3>${title}</h3><div class="field"><label>Valor (${unit})</label><input id="mNum" type="number" inputmode="numeric" min="${min}" max="${max}"></div>
+    <div class="row-btns"><button class="bigbtn" id="mCancel">Cancelar</button><button class="bigbtn go" id="mOk">Registrar</button></div>`);
+  $('mCancel').addEventListener('click',closeSheet);
+  $('mOk').addEventListener('click',()=>{ const v=parseInt($('mNum').value,10); if(!(v>=min&&v<=max)) return toast(`Entre ${min} y ${max}`); closeSheet(); cb(v); });
+  setTimeout(()=>{const el=$('mNum'); if(el) el.focus();},50);
+}
+const apgarSel=id=>`<select id="${id}"><option value="">—</option>${Array.from({length:11},(_,i)=>`<option>${i}</option>`).join('')}</select>`;
+function openCierre(){
+  const c=code.cierre||{};
+  openSheet(`<h3>Cierre del código</h3><p class="muted">Se completa con calma, al terminar. Todo es opcional.</p>
+    <div class="grid3">
+      <div class="field"><label>Apgar 1′</label>${apgarSel('cA1')}</div>
+      <div class="field"><label>Apgar 5′</label>${apgarSel('cA5')}</div>
+      <div class="field"><label>Apgar 10′</label>${apgarSel('cA10')}</div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Temperatura (°C)</label><input id="cT" type="number" inputmode="decimal" step="0.1" placeholder="36.6"></div>
+      <div class="field"><label>Glucemia (mg/dL)</label><input id="cG" type="number" inputmode="numeric" placeholder="55"></div>
+      <div class="field"><label>PIP / PEEP máx.</label><input id="cP" type="text" placeholder="25/5"></div>
+      <div class="field"><label>TET (mm · cm)</label><input id="cTet" type="text" placeholder="3,5 · 9"></div>
+      <div class="field"><label>Detector de CO₂</label><select id="cCo2"><option value="">—</option><option>Cambió de color</option><option>No cambió</option><option>No se usó</option></select></div>
+      <div class="field"><label>Destino</label><select id="cDest"><option value="">—</option><option>UCIN</option><option>Cuidados intermedios</option><option>Con su madre</option><option>Traslado</option><option>Falleció</option></select></div>
+    </div>
+    <div class="field"><label>Tono y color</label><input id="cTono" type="text" placeholder="Hipotónico, rosado"></div>
+    <div class="row-btns"><button class="bigbtn" id="cSkip">Ahora no</button><button class="bigbtn go" id="cSave">Guardar cierre</button></div>`);
+  const map={cA1:'a1',cA5:'a5',cA10:'a10',cT:'t',cG:'g',cP:'p',cTet:'tet',cCo2:'co2',cDest:'dest',cTono:'tono'};
+  Object.entries(map).forEach(([id,k])=>{ if(c[k]!=null) $(id).value=c[k]; });
+  $('cSkip').addEventListener('click',closeSheet);
+  $('cSave').addEventListener('click',()=>{
+    const n={}; Object.entries(map).forEach(([id,k])=>{ const v=String($(id).value||'').trim(); if(v) n[k]=v; });
+    code.cierre=n; store.set('code',code); closeSheet();
+    const s=cierreTxt(n); if(s) addLog('Cierre: '+s); else toast('Cierre vacío');
+  });
+}
+function cierreTxt(c){
+  if(!c) return ''; const p=[];
+  if(c.a1||c.a5||c.a10) p.push('Apgar '+[c.a1||'–',c.a5||'–',c.a10||'–'].join('/'));
+  if(c.t) p.push('T '+String(c.t).replace('.',',')+' °C'); if(c.g) p.push('glucemia '+c.g+' mg/dL');
+  if(c.p) p.push('PIP/PEEP '+c.p); if(c.tet) p.push('TET '+c.tet); if(c.co2) p.push('CO₂: '+c.co2.toLowerCase());
+  if(c.tono) p.push(c.tono); if(c.dest) p.push('destino: '+c.dest);
+  return p.join(' · ');
+}
+$('btnCierre').addEventListener('click',openCierre);
 function renderEpi(){
   const n=code.epi.length; $('epiCount').textContent=n+(n===1?' dosis':' dosis');
   if(!n){$('epiNext').textContent='';return}
@@ -703,23 +836,25 @@ function renderEpi(){
   else if(s<300) $('epiNext').innerHTML='· <b class="c-red">ventana de repetición</b> (hace '+mmss(s)+')';
   else $('epiNext').innerHTML='· hace <b class="c-red">'+mmss(s)+'</b>';
 }
-function startCode(){ code={start:now(),end:null,log:[],epi:[]}; store.set('code',code); addLog('Nacimiento'); tick(); }
+function startCode(){ code={start:now(),end:null,log:[],epi:[]}; store.set('code',code); addLog('Nacimiento'); renderEvalNow(); tick(); }
 $('btnBirth').addEventListener('click',()=>{
   if(code.start&&!code.end&&!confirm('Hay un código en curso. ¿Reiniciar desde cero?')) return;
   startCode();
 });
-$('btnEnd').addEventListener('click',()=>{ if(!code.start||code.end) return; addLog('Fin del código'); code.end=now(); store.set('code',code); stopMetro(); tick(); });
-$('btnClear').addEventListener('click',()=>{ if(!confirm('¿Borrar cronómetro y bitácora?')) return; code={start:null,end:null,log:[],epi:[]}; store.set('code',code); renderLog(); renderEpi(); tick(); });
+$('btnEnd').addEventListener('click',()=>{ if(!code.start) return; if(!code.end){ addLog('Fin del código'); code.end=now(); store.set('code',code); stopMetro(); tick(); } openCierre(); });
+$('btnClear').addEventListener('click',()=>{ if(!confirm('¿Borrar cronómetro y bitácora?')) return; code={start:null,end:null,log:[],epi:[]}; store.set('code',code); renderLog(); renderEpi(); renderEvalNow(); tick(); });
 $('btnCopy').addEventListener('click',()=>{
   if(!code.log.length) return toast('Bitácora vacía');
   const head=`Reanimación neonatal — ${new Date(code.start).toLocaleString('es-PA')}\nPaciente: ${pt.kg?fmt(pt.kg,2)+' kg':'peso ¿?'} · ${pt.eg?pt.eg+' sem':'EG ¿?'}\n`;
   const body=code.log.map(e=>`${e.t} (${e.clock})  ${e.txt}`).join('\n');
-  const txt=head+body;
+  const cz=cierreTxt(code.cierre);
+  const txt=head+body+(cz?`\n\nCIERRE: ${cz}`:'');
   (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast('Copiado'),()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Copiado')}catch(e){}ta.remove()});
 });
 function tick(){
   const s=elapsed(); $('clk').textContent=mmss(s);
   const run=code.start&&!code.end; $('clk').classList.toggle('run',!!run);
+  $('btnCierre').classList.toggle('hide',!code.end);
   $('clkState').textContent=!code.start?'Detenido':code.end?'Finalizado':'En curso';
   const m=Math.floor(s/60);
   $('clkHint').textContent=!code.start?'Pulse «Nacimiento» al salir el bebé.':code.end?'Código cerrado. Copie la bitácora.':(s<60?'Minuto de oro: ventilar si apnea o FC <100.':'Minuto '+(m+1)+' de vida');
@@ -737,16 +872,16 @@ setInterval(tick,500);
 let ac=null, mTimer=null, mMode=null, mStep=0;
 function beep(f,dur,vol){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); if(ac.state==='suspended') ac.resume();
   const o=ac.createOscillator(),g=ac.createGain(); o.frequency.value=f; o.type='sine'; g.gain.setValueAtTime(vol,ac.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+dur); o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+dur);}catch(e){} }
-function flash(cls,txt){ const b=$('beat'); b.textContent=txt; b.classList.add(cls); setTimeout(()=>b.classList.remove(cls),120); }
+function flash(cls,txt){ const b=$('beat'); b.textContent=txt; if(!cls) return; b.classList.add(cls); setTimeout(()=>b.classList.remove(cls),120); }
 function stopMetro(){ clearInterval(mTimer); mTimer=null; mMode=null; $('mVent').classList.remove('on'); $('mComp').classList.remove('on'); $('beat').textContent='—'; }
 function startMetro(mode){
   stopMetro(); mMode=mode; mStep=0; $(mode==='v'?'mVent':'mComp').classList.add('on');
   if(mode==='v'){ // 40/min: ventila (1) - dos - tres => 1.5 s ciclo, 3 tiempos de 0.5 s
     const words=['VENTILA','dos','tres'];
-    mTimer=setInterval(()=>{ const i=mStep%3; if(i===0){beep(660,.18,.5);flash('flashv',words[0])} else {beep(440,.05,.12);flash('',words[i])} mStep++; },500);
+    mTimer=setInterval(()=>{ const i=mStep++%3; if(i===0){beep(660,.18,.5);flash('flashv',words[0])} else {beep(440,.05,.12);flash('',words[i])} },500);
   } else { // 120 eventos/min = 0.5 s; uno-dos-tres-VENTILA
     const words=['UNO','DOS','TRES','VENTILA'];
-    mTimer=setInterval(()=>{ const i=mStep%4; if(i<3){beep(880,.07,.4);flash('flash',words[i])} else {beep(520,.2,.5);flash('flashv',words[i])} mStep++; },500);
+    mTimer=setInterval(()=>{ const i=mStep++%4; if(i<3){beep(880,.07,.4);flash('flash',words[i])} else {beep(520,.2,.5);flash('flashv',words[i])} },500);
   }
   if(!code.start) toast('Metrónomo activo');
 }
@@ -784,7 +919,7 @@ $('btnStart').addEventListener('click',()=>{ $('cover').classList.add('hide'); t
 $('btnCover').addEventListener('click',()=>{ $('cover').classList.remove('hide'); });
 try{ if(sessionStorage.getItem('mdo_seen')) $('cover').classList.add('hide'); }catch(e){}
 
-update(); renderLog(); tick();
+update(); renderLog(); renderEvalNow(); tick();
 
 /* =====================================================
    PWA: manifiesto + service worker

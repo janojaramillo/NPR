@@ -1,6 +1,6 @@
 /* Minuto de Oro · Reanimación Neonatal — service worker
    Cambie VERSION en cada publicación para forzar la actualización. */
-const VERSION = 'mdo-v2.0.0-2026-10-31';
+const VERSION = 'mdo-v2.1.0-2026-11-07';
 const CORE = ['./', './index.html'];
 
 self.addEventListener('install', e => {
